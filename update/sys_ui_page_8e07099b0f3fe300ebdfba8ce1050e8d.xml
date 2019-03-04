@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[function reload(){
+	var numberHTML = document.getElementById("number");
+	var selectedNumber = numberHTML.options[numberHTML.selectedIndex].value;
+
+	var priorityHTML = document.getElementById("priority");
+	var selectedPriority = priorityHTML.options[priorityHTML.selectedIndex].value;
+
+	var callerHTML = document.getElementById("caller");
+	var selectedCaller = callerHTML.options[callerHTML.selectedIndex].value;
+
+	var stateHTML = document.getElementById("state");
+	var selectedState = stateHTML.options[stateHTML.selectedIndex].value;
+
+	var incidentAjax = new GlideAjax('getIncidentsRecords');
+	incidentAjax.addParam('sysparm_name','execute');
+	incidentAjax.addParam('selectedNumber', selectedNumber);
+	incidentAjax.addParam('selectedPriority', selectedPriority);
+	incidentAjax.addParam('selectedCaller', selectedCaller);
+	incidentAjax.addParam('selectedState', selectedState);
+
+	incidentAjax.getXML(function(response){
+		var answer = response.responseXML.documentElement.getAttribute("answer");
+		var objArr = JSON.parse(answer);
+		var recordHTML = document.getElementsByTagName('tr');
+
+		for(i=2; i<recordHTML.length; i++){
+			recordHTML[i].style.display = "none";
+		}
+
+		for(i=0; i<objArr.length; i++){
+			document.getElementById(objArr[i]).style.display = 'table-row';
+		}
+	}); 
+}]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_244499_report_ui_Dynamic Incident List.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	<body onload="reload()">
+		<g:evaluate>
+			var columnOptions = new getColumnOptions();
+
+			var numberArr = columnOptions.getNumber();
+			var priorityArr = columnOptions.getPriority();
+			var callerArr = columnOptions.getCaller();
+			var stateArr = columnOptions.getState();	
+			
+			var incidents = new GlideRecord('incident');
+			incidents.query();
+		</g:evaluate>
+		
+		<div class="container-fluid">
+			<table class="table table-striped table-hover" style="table-layout: fixed;">
+				<thead>
+					<tr>
+						<th style="min-width:20%">Number</th>
+						<th style="min-width:20%">Priority</th>
+						<th style="min-width:20%">Caller</th>
+						<th style="min-width:20%">State</th>
+						<th style="min-width:20%">Short Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="min-width:20%">
+							<select name = "number" id="number" class="form-control" onChange="reload()">
+								<option value = "All">All</option>
+								<j:while test="${numberArr.next()}">
+									<option value="${numberArr.number}">${numberArr.number.getDisplayValue()}</option>
+								</j:while>
+							</select>
+						</td>
+						<td style="min-width:20%">
+							<select name = "priority" id="priority" class="form-control" onChange="reload()">
+								<option value = "All">All</option>
+								<j:while test="${priorityArr.next()}">
+									<option value="${priorityArr.value}">${priorityArr.label.getDisplayValue()}</option>
+								</j:while>
+							</select>
+						</td>
+						<td style="min-width:20%">
+							<select name = "caller" id="caller" class="form-control" onChange="reload()">
+								<option value = "All">All</option>
+								<j:while test="${callerArr.next()}">
+									<option value="${callerArr.caller_id}">${callerArr.caller_id.getDisplayValue()}</option>
+								</j:while>
+							</select>
+						</td>
+						<td style="min-width:20%">
+							<select name = "state" id="state" class="form-control" onChange="reload()">
+								<option value = "All">All</option>
+								<j:while test="${stateArr.next()}">
+									<option value="${stateArr.value}">${stateArr.label.getDisplayValue()}</option>
+								</j:while>
+							</select>
+						</td>
+						<td style="min-width:20%"></td>
+					</tr>
+					
+					<j:while test="${incidents.next()}">
+						<tr id='${incidents.number}'>
+							<td style="min-width:20%">${incidents.number.getDisplayValue()}</td>
+							<td style="min-width:20%">${incidents.priority.getDisplayValue()}</td>
+							<td style="min-width:20%">${incidents.caller_id.getDisplayValue()}</td>
+							<td style="min-width:20%">${incidents.state.getDisplayValue()}</td>
+							<td style="min-width:20%">${incidents.short_description.getDisplayValue()}</td>
+						</tr>
+					</j:while>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</j:jelly>]]></html>
+        <name>Dynamic Incident List</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-02-28 12:15:26</sys_created_on>
+        <sys_id>8e07099b0f3fe300ebdfba8ce1050e8d</sys_id>
+        <sys_mod_count>101</sys_mod_count>
+        <sys_name>Dynamic Incident List</sys_name>
+        <sys_package display_value="Incident Reports UI Page" source="x_244499_report_ui">9cf6895b0f3fe300ebdfba8ce1050e72</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Incident Reports UI Page">9cf6895b0f3fe300ebdfba8ce1050e72</sys_scope>
+        <sys_update_name>sys_ui_page_8e07099b0f3fe300ebdfba8ce1050e8d</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-04 11:24:13</sys_updated_on>
+    </sys_ui_page>
+</record_update>

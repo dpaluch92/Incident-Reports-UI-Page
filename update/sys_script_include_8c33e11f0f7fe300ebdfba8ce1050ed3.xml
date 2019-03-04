@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_244499_report_ui.getColumnOptions</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>getColumnOptions</name>
+        <script><![CDATA[var getColumnOptions = Class.create();
+getColumnOptions.prototype = {
+	initialize: function() {
+	},
+
+	getNumber: function(){
+		var numberGR = new GlideRecord('incident');
+		numberGR.query();
+
+		return numberGR;
+	},
+
+	getPriority: function(){
+		var priorityGR = new GlideRecord('sys_choice');
+		priorityGR.addQuery('name','task');
+		priorityGR.addQuery('element','priority');
+		priorityGR.query();
+
+		return priorityGR;
+	},
+
+	getCaller: function(){
+		var callerGR = new GlideAggregate('incident');
+		callerGR.groupBy('caller_id');
+		callerGR.query();
+
+		return callerGR;
+
+	},
+
+	getState: function(){
+		var stateGR = new GlideRecord('sys_choice');
+		stateGR.addQuery('name','incident');
+		stateGR.addQuery('element','state');
+		stateGR.query();
+
+		return stateGR;
+	},
+
+	type: 'getColumnOptions'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-02-28 14:12:34</sys_created_on>
+        <sys_id>8c33e11f0f7fe300ebdfba8ce1050ed3</sys_id>
+        <sys_mod_count>16</sys_mod_count>
+        <sys_name>getColumnOptions</sys_name>
+        <sys_package display_value="Incident Reports UI Page" source="x_244499_report_ui">9cf6895b0f3fe300ebdfba8ce1050e72</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Incident Reports UI Page">9cf6895b0f3fe300ebdfba8ce1050e72</sys_scope>
+        <sys_update_name>sys_script_include_8c33e11f0f7fe300ebdfba8ce1050ed3</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-02-28 17:07:00</sys_updated_on>
+    </sys_script_include>
+</record_update>
